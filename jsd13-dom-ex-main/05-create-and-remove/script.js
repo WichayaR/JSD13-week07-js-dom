@@ -3,11 +3,16 @@
 
 // TODO 1: Select #item-input, #add-item-btn, #items (the <ul>), and
 // #item-count (the <span>).
-
+const itemInput = document.getElementById('item-input')
+const itemBtn = document.getElementById('add-item-btn')
+const itemUl = document.getElementById('items')
+const itemCount = document.getElementById('item-count')
 
 // TODO 2: Write a function updateCount() that sets item-count's textContent
 // to the number of <li> elements currently in the list (items.children.length).
-
+function updateCount() {
+    itemCount.textContent = itemUl.children.length
+}
 
 // TODO 3: Add a "click" listener on #add-item-btn. Inside it:
 //   - read and trim the input's value; if empty, do nothing
@@ -17,3 +22,19 @@
 //   - add the <li> to the TOP of the list using items.prepend(li)
 //   - clear the input
 //   - call updateCount()
+// console.log(itemInput.value)
+// itemLi.textContent = itemInput.value.trim()
+
+itemBtn.addEventListener('click', () => {
+    let itemLi = document.createElement('li')
+    itemLi.innerHTML = `${itemInput.value.trim()} <button>Remove</button>`
+    if(!itemInput.value.trim() == '') {
+        itemUl.prepend(itemLi)
+        itemInput.value = ''
+        updateCount()
+    }
+    (itemLi.children[0]).addEventListener('click', () => {
+        itemLi.remove()
+        updateCount()
+    })
+})
