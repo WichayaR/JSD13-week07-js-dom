@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basketball Clicker 🏀</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #09090b;
+      color: #f4f4f5;
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .game-layout {
+      display: flex;
+      height: 100vh;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        overflow-y: auto;
+      }
+      .game-layout {
+        flex-direction: column;
+        height: auto;
+      }
+    }
+
+    .panel {
+      flex: 1;
+      padding: 24px;
+      background-color: #18181b;
+      border-right: 1px solid #27272a;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .panel:last-child {
+      border-right: none;
+    }
+
+    .center-panel {
+      flex: 1;
+      background-color: #09090b;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ef4444;
+      border-bottom: 2px solid #ef4444;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header-sub {
+      display: block;
+      font-size: 0.75rem;
+      color: #71717a;
+      font-weight: normal;
+      margin-top: 4px;
+      text-transform: none;
+    }
+
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      background-color: #18181b;
+      z-index: 10;
+      padding-top: 4px;
+      margin-top: -4px;
+      border-bottom-color: #3f3f46;
+      color: #d4d4d8;
+    }
+
+    .score-box {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .score-label {
+      font-size: 0.75rem;
+      color: #a1a1aa;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .score-num {
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 4px 0;
+      line-height: 1;
+    }
+
+    .score-num small {
+      font-size: 1.2rem;
+      color: #71717a;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    .rate-num {
+      font-size: 0.85rem;
+      color: #f87171;
+      font-weight: 600;
+    }
+
+    .ball-area {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 160px;
+      margin: 10px 0;
+    }
+
+    .ball-btn {
+      background: none;
+      border: none;
+      font-size: 120px;
+      cursor: pointer;
+      outline: none;
+      filter: drop-shadow(0 0 30px rgba(239, 68, 68, 0.3));
+      display: inline-block;
+      user-select: none;
+      transition: transform 0.1s ease;
+    }
+
+    .bounce-active {
+      animation: bounceAnim 0.3s ease-out;
+    }
+
+    @keyframes bounceAnim {
+      0% { transform: translateY(0) scale(1, 1); }
+      30% { transform: translateY(22px) scale(1.12, 0.88); }
+      60% { transform: translateY(-12px) scale(0.95, 1.05); }
+      100% { transform: translateY(0) scale(1, 1); }
+    }
+
+    .disclaimer-area {
+      margin-top: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    .quote-text {
+      font-style: italic;
+      font-size: 0.85rem;
+      color: #38bdf8;
+      margin-bottom: 12px;
+    }
+
+    .disclaimer-text {
+      font-size: 0.78rem;
+      color: #9494a0;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .disclaimer-text b {
+      font-size: 1.05rem;
+      color: #e4e4e7;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .slogan-text {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .game-title-badge {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #facc15;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .by-author {
+      font-size: 0.8rem;
+      color: #a1a1aa;
+      margin-top: 4px;
+    }
+
+    .power-box {
+      background-color: #18181b;
+      border: 1px solid #27272a;
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .power-label {
+      font-size: 0.75rem;
+      color: #71717a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .power-val {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #f87171;
+      margin-top: 4px;
+    }
+
+    .power-sub {
+      color: #71717a;
+      font-size: 0.9rem;
+      font-weight: normal;
+    }
+
+    .training-image {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      padding: 10px;
+    }
+
+    .training-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+
+    .shop-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .shop-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #27272a;
+      border: 1px solid #3f3f46;
+      border-radius: 6px;
+      padding: 14px;
+      cursor: pointer;
+      color: #f4f4f5;
+      width: 100%;
+      text-align: left;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .shop-item:hover:not(:disabled) {
+      background-color: #3f3f46;
+      border-color: #ffffff;
+    }
+
+    .shop-item:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .item-icon-box {
+      width: 44px;
+      height: 44px;
+      background-color: #18181b;
+      border: 1px solid #52525b;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .item-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+
+    .item-desc {
+      font-size: 0.75rem;
+      color: #f87171;
+      margin-top: 2px;
+    }
+
+    .item-right {
+      text-align: right;
+    }
+
+    .item-cost {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #f4f4f5;
+    }
+
+    .item-owned {
+      font-size: 0.75rem;
+      color: #71717a;
+      margin-top: 2px;
+    }
+
+    .floating-text {
+      position: fixed;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f87171;
+      pointer-events: none;
+      z-index: 100;
+      animation: floatUp 0.8s ease-out forwards;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -120px) scale(1.3);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-layout">
+
+    <div class="panel">
+      <div class="score-box">
+        <div class="score-label">Dribble Control</div>
+        <div class="score-num">
+          <span id="score-display">0</span><small>Dribbles</small>
+        </div>
+        <div class="rate-num">Dribble Rate: <span id="cps-display">0</span> / sec</div>
+      </div>
+
+      <div class="ball-area">
+        <button id="ball-btn" class="ball-btn" title="Tap to dribble!">🏀</button>
+      </div>
+
+      <div class="disclaimer-area">
+        <div class="quote-text">" Eat, Sleep, Dribble, Repeat.... "</div>
+        <p class="disclaimer-text">
+          <b>Disclaimer:</b> This is a non-profit, fan-made game created for educational purposes to practice HTML, CSS, JavaScript, and DOM Manipulation. Apologies for any unintended errors.
+        </p>
+        <div class="slogan-text">Ball is Life 🏀</div>
+        <div class="game-title-badge">BASKETBALL CLICKER!</div>
+        <div class="by-author">by Learner - JSD13</div>
+      </div>
+    </div>
+
+    <div class="panel center-panel">
+      <div class="panel-header">
+        Command Center
+        <span class="header-sub">Basketball Training & Status</span>
+      </div>
+
+      <div class="power-box">
+        <div class="power-label">Base Dribble Power</div>
+        <div class="power-val"><span id="power-display">1</span> Dribbles <span class="power-sub">/ Click</span></div>
+      </div>
+
+      <div class="training-image">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVB9Z_qPHmCmlmwiXpERvOyVt-MnBaTHrk16f2Sz41fg&s=10" alt="Basketball Training Poster" id="center-img" />
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header sticky-header">Deploy Upgrades</div>
+
+      <div class="shop-list">
+        
+        <button id="buy-sneakers-btn" class="shop-item">
+          <div class="item-left">
+            <div class="item-icon-box">👟</div>
+            <div>
+              <div class="item-name">Pro Sneakers</div>
+              <div class="item-desc">+1 Click Power</div>
+            </div>
+          </div>
+          <div class="item-right">
+            <div class="item-cost">฿ <span id="sneakers-cost">15</span></div>
+            <div class="item-owned">Owned: <span id="sneakers-owned">0</span></div>
+          </div>
+        </button>
+
+        <button id="buy-coach-btn" class="shop-item">
+          <div class="item-left">
+            <div class="item-icon-box">🧢</div>
+            <div>
+              <div class="item-name">Rookie Coach</div>
+              <div class="item-desc">+2 Auto / sec</div>
+            </div>
+          </div>
+          <div class="item-right">
+            <div class="item-cost">฿ <span id="coach-cost">100</span></div>
+            <div class="item-owned">Owned: <span id="coach-owned">0</span></div>
+          </div>
+        </button>
+
+        <button id="buy-hoop-btn" class="shop-item">
+          <div class="item-left">
+            <div class="item-icon-box">🏀</div>
+            <div>
+              <div class="item-name">Basketball Hoop</div>
+              <div class="item-desc">+5 Auto / sec</div>
+            </div>
+          </div>
+          <div class="item-right">
+            <div class="item-cost">฿ <span id="hoop-cost">500</span></div>
+            <div class="item-owned">Owned: <span id="hoop-owned">0</span></div>
+          </div>
+        </button>
+
+        <button id="buy-trainer-btn" class="shop-item">
+          <div class="item-left">
+            <div class="item-icon-box">🏋️</div>
+            <div>
+              <div class="item-name">Pro Trainer</div>
+              <div class="item-desc">+20 Auto / sec</div>
+            </div>
+          </div>
+          <div class="item-right">
+            <div class="item-cost">฿ <span id="trainer-cost">2000</span></div>
+            <div class="item-owned">Owned: <span id="trainer-owned">0</span></div>
+          </div>
+        </button>
+
+        <button id="buy-arena-btn" class="shop-item">
+          <div class="item-left">
+            <div class="item-icon-box">🏟️</div>
+            <div>
+              <div class="item-name">Basketball Arena</div>
+              <div class="item-desc">+100 Auto / sec</div>
+            </div>
+          </div>
+          <div class="item-right">
+            <div class="item-cost">฿ <span id="arena-cost">10000</span></div>
+            <div class="item-owned">Owned: <span id="arena-owned">0</span></div>
+          </div>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
